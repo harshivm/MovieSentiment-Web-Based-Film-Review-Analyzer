@@ -1,0 +1,73 @@
+<div class="search-container">
+  <div class="search-header">
+    <h1 class="app-title">🎬 Movie Sentiment Analyzer</h1>
+    <p class="app-subtitle">Discover audience sentiment for any movie</p>
+  </div>
+
+  <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="search-form">
+    <div class="search-input-group">
+      <div class="input-wrapper">
+        <span class="material-icons search-icon">search</span>
+        <input
+          type="text"
+          formControlName="movieTitle"
+          placeholder="Enter movie title (e.g., 'Inception', 'Parasite', 'The Dark Knight')"
+          class="search-input"
+          [class.invalid]="isSubmitted && movieTitleControl?.invalid"
+          autocomplete="off"
+        >
+        <button 
+          type="button" 
+          class="clear-button"
+          (click)="clearSearch()"
+          [hidden]="!movieTitleControl?.value"
+        >
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+      
+      <button 
+        type="submit" 
+        class="search-button"
+        [disabled]="searchForm.invalid"
+      >
+        <span class="material-icons">insights</span>
+        Analyze Sentiment
+      </button>
+    </div>
+
+    <div *ngIf="isSubmitted && movieTitleControl?.invalid" class="error-message">
+      <span class="material-icons">error</span>
+      {{ getErrorMessage() }}
+    </div>
+
+    <div class="search-hints">
+      <p class="hint-title">Quick search:</p>
+      <div class="hint-tags">
+        <button 
+          type="button" 
+          class="hint-tag"
+          *ngFor="let hint of recentSearches"
+          (click)="setSearchValue(hint)"
+        >
+          {{ hint }}
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div class="feature-list">
+    <div class="feature">
+      <span class="material-icons feature-icon">sentiment_very_satisfied</span>
+      <span class="feature-text">Real-time sentiment analysis</span>
+    </div>
+    <div class="feature">
+      <span class="material-icons feature-icon">verified</span>
+      <span class="feature-text">High accuracy results</span>
+    </div>
+    <div class="feature">
+      <span class="material-icons feature-icon">trending_up</span>
+      <span class="feature-text">Comprehensive insights</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,117 @@
+<div class="sentiment-container" *ngIf="analysis && !isLoading">
+  
+  <!-- Data Source Indicator -->
+  <div class="data-source-indicator">
+    <div *ngIf="analysis.real" class="real-badge">
+      <span class="material-icons">verified</span>
+      REAL DATA ({{analysis.source}})
+    </div>
+    <div *ngIf="!analysis.real" class="mock-badge">
+      <span class="material-icons">info</span>
+      DEMO MODE
+    </div>
+  </div>
+
+  <!-- Movie Card -->
+  <div class="movie-card">
+    <div class="movie-poster">
+      <img [src]="analysis.movie.posterUrl" [alt]="analysis.movie.title + ' poster'">
+    </div>
+    <div class="movie-info">
+      <h2 class="movie-title">{{ analysis.movie.title }} ({{ analysis.movie.year }})</h2>
+      <p class="movie-director">
+        <span class="material-icons">person</span>
+        {{ analysis.movie.director }}
+      </p>
+      <p class="movie-genre">
+        <span class="material-icons">category</span>
+        {{ analysis.movie.genre }}
+      </p>
+      <div class="movie-rating">
+        <span class="rating-value">
+          <span class="material-icons">star</span>
+          {{ analysis.movie.rating.toFixed(1) }}/10
+        </span>
+        <span class="review-count">
+          <span class="material-icons">groups</span>
+          {{ analysis.reviewCount.toLocaleString() }} votes
+        </span>
+      </div>
+      <p class="movie-overview" *ngIf="analysis.movie.overview">
+        {{ analysis.movie.overview }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Sentiment Analysis -->
+  <div class="sentiment-result">
+    <div class="sentiment-header">
+      <div class="sentiment-badge" [style.background-color]="getSentimentColor(analysis.sentiment.type)">
+        <span class="material-icons">
+          {{ analysis.sentiment.type === 'positive' ? 'sentiment_very_satisfied' : 
+             analysis.sentiment.type === 'negative' ? 'sentiment_very_dissatisfied' : 
+             'sentiment_neutral' }}
+        </span>
+        <span class="sentiment-label">
+          {{ analysis.sentiment.type === 'positive' ? 'Positive' : 
+             analysis.sentiment.type === 'negative' ? 'Negative' : 
+             'Neutral' }}
+        </span>
+      </div>
+      <div class="confidence-score">
+        <span class="material-icons">psychology</span>
+        Confidence: {{ (analysis.confidence * 100).toFixed(1) }}%
+      </div>
+    </div>
+
+    <!-- Sentiment Score -->
+    <div class="sentiment-score">
+      <div class="score-label">
+        <span>Sentiment Score</span>
+        <span class="score-value">{{ (analysis.sentiment.score * 100).toFixed(1) }}/100</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" 
+             [style.width.%]="getProgressBarValue(analysis.sentiment.score)"
+             [style.background-color]="getSentimentColor(analysis.sentiment.type)">
+        </div>
+      </div>
+      <div class="score-range">
+        <span>Negative</span>
+        <span>Neutral</span>
+        <span>Positive</span>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="sentiment-summary">
+      <h3><span class="material-icons">summarize</span> Analysis Summary</h3>
+      <p>{{ analysis.sentiment.summary }}</p>
+    </div>
+
+    <!-- Analysis Details -->
+    <div class="analysis-details">
+      <div class="detail-item">
+        <span class="detail-label">
+          <span class="material-icons">calendar_today</span>
+          Analysis Date:
+        </span>
+        <span class="detail-value">{{ formatDate(analysis.timestamp) }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">
+          <span class="material-icons">source</span>
+          Data Source:
+        </span>
+        <span class="detail-value">{{ analysis.source }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">
+          <span class="material-icons">thumb_up</span>
+          Total Votes:
+        </span>
+        <span class="detail-value">{{ analysis.reviewCount.toLocaleString() }}</span>
+      </div>
+    </div>
+  </div>
+</div>
